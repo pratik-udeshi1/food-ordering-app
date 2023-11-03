@@ -1,57 +1,56 @@
 from django.apps import apps
-
-import hashlib
-import random
+from django.core.exceptions import ObjectDoesNotExist
 
 
-def create_instance(model_name, **kwargs):
-    model = ""
+def get_or_create_instance(model, create_kwargs=None, **filter_kwargs):
+    if create_kwargs:
+        # Create and return an instance if create_kwargs are provided
+        instance, created = model.objects.get_or_create(**filter_kwargs, defaults=create_kwargs)
+    else:
+        try:
+            instance = model.objects.get(**filter_kwargs)
+        except ObjectDoesNotExist:
+            instance = None
+
+    return instance
+
+
+def filter_instance(model, ordering=None, **filter_kwargs):
+    instances = model.objects.filter(**filter_kwargs)
+    if ordering:
+        instances = instances.order_by(ordering)
+    return instances
+
+
+def update_instance(app_label, model_name, instance_id, update_data):
+    model = apps.get_model(app_label=app_label, model_name=model_name)
     try:
-        model = apps.get_model(app_label='apps', model_name=model_name)
-        instance = model.objects.create(**kwargs)
+        instance = model.objects.get(id=instance_id)
+        for key, value in update_data.items():
+            setattr(instance, key, value)
+        instance.save()
         return instance
     except model.DoesNotExist:
         return None
 
 
-def get_instance(model_name, **kwargs):
-    model = ""
+def delete_instance(app_label, model_name, instance_id):
+    model = apps.get_model(app_label=app_label, model_name=model_name)
     try:
-        model = apps.get_model(app_label='apps', model_name=model_name)
-        instance = model.objects.get(**kwargs)
-        return instance
+        instance = model.objects.get(id=instance_id)
+        instance.delete()
+        return True
     except model.DoesNotExist:
-        return None
+        return False
 
 
-def filter_instance(model_name, **kwargs):
-    model = apps.get_model(app_label='apps', model_name=model_name)
-    return model.objects.filter(**kwargs)
+def list_instances(app_label, model_name, **filter_kwargs):
+    model = apps.get_model(app_label=app_label, model_name=model_name)
+    instances = model.objects.filter(**filter_kwargs)
+    return instances
 
 
-def make_secret(keyword: str):
-    """
-    Generate a random secret token, everytime you call it wit same keyword
-    """
-    return hashlib.sha256('{}-{}'.format(str(random.getrandbits(256)), keyword).encode('utf-8')).hexdigest()
-
-
-def make_password(keyword: str):
-    """
-     convert the keyword into hashed_keyword
-     - using the sha256 hash Algo
-     """
-    return hashlib.sha256('{}'.format(keyword).encode()).hexdigest()
-
-
-def random_chars(length: int):
-    """
-    this will create a random characters of uppercase and digits mixed
-    currently using for:
-    1. creating temporary password
-    2. creating product code of 7 characters
-    """
-    # raw_chars = [ch for ch in string.ascii_uppercase] + [num for num in string.digits]
-    # random_characters = "".join(random.choices(raw_chars, k=length))
-    # return random_characters
-    return ''.join(random.choice('0123456789ABCDEF') for _ in range(length))
+def count_instances(app_label, model_name, **filter_kwargs):
+    model = apps.get_model(app_label=app_label, model_name=model_name)
+    count = model.objects.filter(**filter_kwargs).count()
+    return count

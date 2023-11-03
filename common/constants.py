@@ -24,7 +24,7 @@ class ApplicationMessages:
 
     SUCCESS = "Success"
     NOT_AUTHORIZE = "{} is not authorized to perform this action"
-    EMAIL_PASSWORD_INCORRECT = "Email or password is incorrect or both"
+    EMAIL_PASSWORD_INCORRECT = "Email or password is incorrect"
     CURRENT_NEW_PASSWORD_NOT_SAME = "New password should not be same as Current password"
     NEW_PASSWORD_RETYPE_PASSWORD_NOT_SAME = "Confirm password should be same as New password"
     INVALID_PASSWORD = "Invalid Password"
