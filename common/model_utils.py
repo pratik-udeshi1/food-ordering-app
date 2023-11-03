@@ -1,4 +1,3 @@
-from django.apps import apps
 from django.core.exceptions import ObjectDoesNotExist
 
 
@@ -22,8 +21,7 @@ def filter_instance(model, ordering=None, **filter_kwargs):
     return instances
 
 
-def update_instance(app_label, model_name, instance_id, update_data):
-    model = apps.get_model(app_label=app_label, model_name=model_name)
+def update_instance(model, instance_id, update_data):
     try:
         instance = model.objects.get(id=instance_id)
         for key, value in update_data.items():
@@ -34,8 +32,7 @@ def update_instance(app_label, model_name, instance_id, update_data):
         return None
 
 
-def delete_instance(app_label, model_name, instance_id):
-    model = apps.get_model(app_label=app_label, model_name=model_name)
+def delete_instance(model, instance_id):
     try:
         instance = model.objects.get(id=instance_id)
         instance.delete()
@@ -44,13 +41,11 @@ def delete_instance(app_label, model_name, instance_id):
         return False
 
 
-def list_instances(app_label, model_name, **filter_kwargs):
-    model = apps.get_model(app_label=app_label, model_name=model_name)
+def list_instances(model, **filter_kwargs):
     instances = model.objects.filter(**filter_kwargs)
     return instances
 
 
-def count_instances(app_label, model_name, **filter_kwargs):
-    model = apps.get_model(app_label=app_label, model_name=model_name)
+def count_instances(model, **filter_kwargs):
     count = model.objects.filter(**filter_kwargs).count()
     return count
