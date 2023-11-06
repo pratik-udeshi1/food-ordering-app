@@ -4,14 +4,13 @@ This is the backend of a restaurant management system built using Django. The pr
 
 ## Modules
 
-1. **Reservation**: Manage customer reservations and table assignments.
-2. **Payment**: Handle payment processing for customer orders.
-3. **Notification**: Send notifications and updates to customers and staff.
-4. **Inventory**: Manage restaurant inventory, including stock tracking and ordering.
-5. **Review**: Allow customers to leave reviews and ratings for the restaurant.
-6. **Report**: Generate reports and analytics on restaurant performance.
-7. **Order**: Manage customer food orders.
-8. **Waste Management**: Manage Food wastages at the end of the day.
+1. **Payment**: Handle payment processing for customer orders.
+2. **Notification**: Send notifications and updates to customers and staff.
+3. **Inventory**: Manage restaurant inventory, including stock tracking and ordering.
+4. **Review**: Allow customers to leave reviews and ratings for the restaurant.
+5. **Report**: Generate reports and analytics on restaurant performance.
+6. **Order**: Manage customer food orders.
+7. **Waste Management**: Manage Food wastage's at the end of the day.
 
 ## Getting Started
 
@@ -81,7 +80,7 @@ Follow these steps to set up and run the project locally.
 
    #### Reservation API
 
-   - Endpoint: `/api/reservation/`
+   - Endpoint: `/api/order/`
    - Methods: GET, POST, PUT, DELETE
 
    ##### Basic Usage
@@ -101,7 +100,7 @@ Follow these steps to set up and run the project locally.
      GET /api/order/
      ```
 
-   - To update a order:
+   - To update the order:
      ```
      PUT /api/order/{order_id}/
      {
