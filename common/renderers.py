@@ -31,29 +31,26 @@ class ApiRenderer(BaseRenderer):
 
     @staticmethod
     def extract_error_messages(payload: any, error_messages):
-        def format_key(key):
-            return key.replace('_', ' ').capitalize()
-
         if isinstance(payload, dict):
             for key, value in payload.items():
-                format_key = format_key(key) if isinstance(key, str) else str(key)
-
+                # format key: replace <_ underscore> with < space>
+                format_key = key.replace('_', ' ') if isinstance(key, str) else '{}'.format(key)
+                format_key = format_key[0:1].upper() + format_key[1:]
                 if isinstance(value, dict):
                     ApiRenderer.extract_error_messages(value, error_messages)
-                elif isinstance(value, list):
+                if isinstance(value, list):
                     if isinstance(value[0], str):
-                        error_messages.append(', '.join(value).replace('This', format_key))
+                        error_messages += [', '.join(value).replace('This', format_key)]
                     elif isinstance(value[0], dict):
                         ApiRenderer.extract_error_messages(value[0], error_messages)
                 elif isinstance(value, str):
-                    error_messages.append(value.format('This', format_key))
+                    error_messages += [value.format('This', format_key)]
         elif isinstance(payload, str):
-            error_messages.append(payload)
+            error_messages += [payload]
         elif isinstance(payload, list):
-            error_messages.extend(payload)
+            error_messages = payload
 
         return error_messages
-
 
     @staticmethod
     def format_error_message(payload: any):

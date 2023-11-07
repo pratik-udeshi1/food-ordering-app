@@ -8,6 +8,7 @@ class Constants:
     INVITATION_TOKEN = "INVITATION"
 
     ADMIN = "ADMIN"
+    STAFF = "STAFF"
 
     WEB = "WEB"
     ANDROID = "MOBILE"
@@ -23,6 +24,7 @@ class ApplicationMessages:
     """
 
     SUCCESS = "Success"
+    NOT_FOUND = "Record Not Found"
     NOT_AUTHORIZE = "{} is not authorized to perform this action"
     EMAIL_PASSWORD_INCORRECT = "Email or password is incorrect"
     CURRENT_NEW_PASSWORD_NOT_SAME = "New password should not be same as Current password"
@@ -39,6 +41,8 @@ class ApplicationMessages:
     ALREADY_EXISTS = "Already exists"
     BAD_REQUEST = "Bad request"
     USER_DELETED = "User details removed"
+    RECORD_DELETED = "Record removed successfully"
+    RECORD_NOT_DELETED = "Error occurred while removing the Record"
 
     USER_NOT_ACTIVE = "User is not active"
     SOMETHING_WENT_WRONG = "Something went wrong"
