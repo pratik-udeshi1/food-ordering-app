@@ -49,12 +49,6 @@ INSTALLED_APPS = [
     'common',
     'apps.user',
     'apps.restaurant',
-    'apps.order',
-    'apps.report',
-    'apps.review',
-    'apps.inventory',
-    'apps.notification',
-    'apps.payment',
 ]
 
 MIDDLEWARE = [
