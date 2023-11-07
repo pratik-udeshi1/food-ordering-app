@@ -40,7 +40,7 @@ class RestaurantList(generics.ListCreateAPIView):
 
     def patch(self, request, pk, *args, **kwargs):
         try:
-            instance = self.queryset.get(pk=pk, deleted_at__isnull=False)
+            instance = self.queryset.get(pk=pk)
         except Restaurant.DoesNotExist:
             raise NotFound(detail=ApplicationMessages.NOT_FOUND)
 
