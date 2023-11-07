@@ -1,9 +1,10 @@
 from django.db import models
 
 from apps.user.models import User
+from common.models import BaseModel
 
 
-class Review(models.Model):
+class Review(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     rating = models.PositiveIntegerField()
     comment = models.TextField()
