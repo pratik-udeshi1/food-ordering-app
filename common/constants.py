@@ -35,7 +35,7 @@ class ApplicationMessages:
     PASSWORD_SET = "Password has been set"
     LOGOUT_SUCCESSFULLY = "Logout is successful"
     LOGOUT_FAILED = "Logout Failed. Contact admin."
-    DOES_NOT_EXISTS = "{} not exists"
+    DOES_NOT_EXISTS = "{} not found"
     EMAIL_SENT = "Email has been sent"
     INVITE_NOT_SENT = "Invite could not be sent. Check details again"
     ALREADY_EXISTS = "Already exists"
