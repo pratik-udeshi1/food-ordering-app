@@ -1,10 +1,7 @@
-from django.utils import timezone
 from rest_framework import generics, status, filters
 from rest_framework.response import Response
 
 from common import permissions, pagination
-from common.constants import ApplicationMessages
-from common.model_utils import filter_instance, get_object_or_notfound
 from .models import Order
 from .serializers import OrderSerializer
 
@@ -16,7 +13,7 @@ class OrderList(generics.ListCreateAPIView):
     pagination_class = pagination.DefaultPagination
     filter_backends = [filters.SearchFilter]
     search_fields = ['name', 'address']
-    #
+
     # def get_queryset(self):
     #     return filter_instance(self.model, ordering='-created_at')
     #

@@ -41,3 +41,4 @@ class OrderItem(BaseModel):
     quantity = models.PositiveIntegerField(default=1)
     special_instructions = models.TextField(blank=True, null=True)
     amount = models.DecimalField(max_digits=8, decimal_places=2)
+

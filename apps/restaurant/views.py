@@ -7,6 +7,7 @@ from common.constants import ApplicationMessages
 from common.model_utils import filter_instance, get_object_or_notfound
 from .models import Restaurant
 from .serializers import RestaurantSerializer
+from ..menu.models import Menu
 
 
 class RestaurantList(generics.ListCreateAPIView):
@@ -43,5 +44,6 @@ class RestaurantList(generics.ListCreateAPIView):
     def delete(self, request, restaurant_id, *args, **kwargs):
         restaurant = get_object_or_notfound(self.model, id=restaurant_id)
         restaurant.deleted_at = timezone.now()
+        Menu.objects.filter(restaurant=restaurant).update(deleted_at=timezone.now())
         restaurant.save()
         return Response(ApplicationMessages.RECORD_DELETED, status=status.HTTP_200_OK)

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'drf_yasg',
     'corsheaders',
     # 'django_celery_results',
     # 'django_celery_beat',
@@ -49,9 +50,9 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'common',
     'apps.user',
-    'apps.restaurant',
-    'apps.order',
     'apps.menu',
+    'apps.order',
+    'apps.restaurant',
 ]
 
 MIDDLEWARE = [

@@ -1,5 +1,6 @@
 from django.utils import timezone
 from rest_framework import generics, status, filters
+from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 
 from common import permissions, pagination
@@ -7,6 +8,7 @@ from common.constants import ApplicationMessages
 from common.model_utils import filter_instance, get_object_or_notfound
 from .models import Menu
 from .serializers import MenuSerializer
+from ..restaurant.models import Restaurant
 
 
 class MenuList(generics.ListCreateAPIView):
@@ -42,6 +44,8 @@ class MenuList(generics.ListCreateAPIView):
         restaurant_id = self.kwargs.get('restaurant_id')
         menu_id = self.kwargs.get('menu_id')
         menu = get_object_or_notfound(self.model, restaurant__id=restaurant_id, id=menu_id)
+        if menu.restaurant.deleted_at is not None:
+            raise NotFound(detail=ApplicationMessages.NOT_FOUND)
         serializer = self.serializer_class(menu, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
