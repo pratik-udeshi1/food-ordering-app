@@ -11,7 +11,7 @@ class MenuSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Menu
-        exclude = ['created_at', 'updated_at']
+        fields = '__all__'
 
     def create(self, validated_data):
         restaurant = validated_data.pop('restaurant', None)

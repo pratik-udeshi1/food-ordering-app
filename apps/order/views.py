@@ -1,59 +1,45 @@
-from django.utils import timezone
 from rest_framework import generics, status, filters
-from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 
 from common import permissions, pagination
-from common.constants import ApplicationMessages
-from .models import Restaurant
-from .serializers import RestaurantSerializer
+from .models import Order
+from .serializers import OrderSerializer
 
 
-class RestaurantList(generics.ListCreateAPIView):
-    serializer_class = RestaurantSerializer
+class OrderList(generics.ListCreateAPIView):
+    model = Order
+    serializer_class = OrderSerializer
     permission_classes = [permissions.IsStaff]
-    model = Restaurant
-    queryset = Restaurant.objects.filter(deleted_at__isnull=True).order_by('id')
-    filter_backends = [filters.SearchFilter]
     pagination_class = pagination.DefaultPagination
+    filter_backends = [filters.SearchFilter]
     search_fields = ['name', 'address']
 
-    def get(self, request, pk=None, *args, **kwargs):
-        if pk is not None:
-            queryset = self.queryset.filter(pk=pk)
-            if queryset.exists():
-                result = queryset.first()
-                serializer = self.serializer_class(result)
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            raise NotFound(detail=ApplicationMessages.NOT_FOUND)
-
-        filtered_queryset = self.filter_queryset(self.queryset)
-        page = self.paginate_queryset(filtered_queryset)
-        serializer = self.serializer_class(page, many=True)
-        return self.get_paginated_response(serializer.data)
+    # def get_queryset(self):
+    #     return filter_instance(self.model, ordering='-created_at')
+    #
+    # def get(self, request, order_id=None, *args, **kwargs):
+    #     if order_id:
+    #         queryset = get_object_or_notfound(self.model, id=order_id)
+    #         serializer = self.serializer_class(queryset)
+    #         return Response(serializer.data, status=status.HTTP_200_OK)
+    #     return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        request.data['restaurant'] = self.kwargs.get('restaurant_id')
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    def patch(self, request, pk, *args, **kwargs):
-        try:
-            instance = self.queryset.get(pk=pk)
-        except Restaurant.DoesNotExist:
-            raise NotFound(detail=ApplicationMessages.NOT_FOUND)
-
-        serializer = self.serializer_class(instance, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def delete(self, request, pk, *args, **kwargs):
-        try:
-            instance = self.model.objects.get(pk=pk, deleted_at__isnull=True)
-            instance.deleted_at = timezone.now()
-            instance.save()
-            return Response(ApplicationMessages.RECORD_DELETED, status=status.HTTP_200_OK)
-        except self.model.DoesNotExist:
-            return Response(ApplicationMessages.RECORD_NOT_DELETED, status=status.HTTP_400_BAD_REQUEST)
+    # def patch(self, request, order_id, *args, **kwargs):
+    #     order = get_object_or_notfound(self.model, id=order_id)
+    #     serializer = self.serializer_class(order, data=request.data, partial=True)
+    #     serializer.is_valid(raise_exception=True)
+    #     serializer.save()
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
+    #
+    # def delete(self, request, order_id, *args, **kwargs):
+    #     order = get_object_or_notfound(self.model, id=order_id)
+    #     order.deleted_at = timezone.now()
+    #     order.save()
+    #     return Response(ApplicationMessages.RECORD_DELETED, status=status.HTTP_200_OK)

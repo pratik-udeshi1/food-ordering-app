@@ -1,8 +1,9 @@
 from django.urls import path
 
-from .views import RestaurantList
+from apps.order.views import OrderList
 
 urlpatterns = [
-    path('', RestaurantList.as_view(), name='restaurant-list'),
-    path('<uuid:pk>', RestaurantList.as_view(), name='restaurant-detail'),
+    path('restaurant/<uuid:restaurant_id>', OrderList.as_view(), name='menu-list'),
+    path('<uuid:order_id>/restaurant/<uuid:restaurant_id>', OrderList.as_view(), name='menu-detail'),
+
 ]

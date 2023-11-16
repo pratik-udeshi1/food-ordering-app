@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from apps.restaurant import models as restaurant_model
+from apps.order import models as order_model
 
 # Register your models here.
-admin.site.register(restaurant_model.Restaurant)
+admin.site.register(order_model.Order)
+admin.site.register(order_model.OrderItem)

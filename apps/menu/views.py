@@ -17,7 +17,7 @@ class MenuList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsStaff]
     pagination_class = pagination.DefaultPagination
     filter_backends = [filters.SearchFilter]
-    search_fields = ['name', 'address']
+    search_fields = ['name', 'description', 'category', 'classification']
 
     def get_queryset(self):
         restaurant_id = self.kwargs.get('restaurant_id')
@@ -40,7 +40,9 @@ class MenuList(generics.ListCreateAPIView):
         menu_item = serializer.save()
         return Response(menu_item, status=status.HTTP_201_CREATED)
 
-    def patch(self, request, restaurant_id, menu_id, *args, **kwargs):
+    def patch(self, request, *args, **kwargs):
+        restaurant_id = self.kwargs.get('restaurant_id')
+        menu_id = self.kwargs.get('menu_id')
         menu = get_object_or_notfound(self.model, restaurant__id=restaurant_id, id=menu_id)
         if menu.restaurant.deleted_at is not None:
             raise NotFound(detail=ApplicationMessages.NOT_FOUND)
@@ -49,7 +51,9 @@ class MenuList(generics.ListCreateAPIView):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def delete(self, request, restaurant_id, menu_id, *args, **kwargs):
+    def delete(self, request, *args, **kwargs):
+        restaurant_id = self.kwargs.get('restaurant_id')
+        menu_id = self.kwargs.get('menu_id')
         menu = get_object_or_notfound(self.model, restaurant__id=restaurant_id, id=menu_id)
         menu.deleted_at = timezone.now()
         menu.save()
