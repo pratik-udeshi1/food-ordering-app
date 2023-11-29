@@ -20,7 +20,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 ROOT_DIR = environ.Path(__file__) - 2
 PROJECT_DIR = ROOT_DIR.path('restaurant')
 APPS_DIR = ROOT_DIR.path('apps')
-
+env = environ.Env()
+environ.Env.read_env(env_file=ROOT_DIR('.env'))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
     # 'django_filters',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
+    'django_seed',
     'common',
     'apps.user',
     'apps.menu',
@@ -124,10 +126,11 @@ WSGI_APPLICATION = 'restaurant.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': env.db()
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
 }
 
 # Password validation

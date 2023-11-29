@@ -19,10 +19,7 @@ class Order(BaseModel):
     menu_items = models.ManyToManyField(Menu, through='OrderItem')
     status = models.CharField(max_length=20, choices=ORDER_STATUS_CHOICES, default='pending')
     timestamp = models.DateTimeField(auto_now_add=True)
-    final_total = models.DecimalField(max_digits=8, decimal_places=2)
-
-    def __str__(self):
-        return self.order_number
+    total = models.DecimalField(max_digits=8, decimal_places=2)
 
     def save(self, *args, **kwargs):
         if not self.order_number:
@@ -40,5 +37,4 @@ class OrderItem(BaseModel):
     menu_item = models.ForeignKey(Menu, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
     special_instructions = models.TextField(blank=True, null=True)
-    amount = models.DecimalField(max_digits=8, decimal_places=2)
-
+    price = models.DecimalField(max_digits=8, decimal_places=2)

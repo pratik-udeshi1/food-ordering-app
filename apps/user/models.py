@@ -51,7 +51,7 @@ class User(AbstractBaseUser, BaseModel):
     REQUIRED_FIELDS = []
 
     def __str__(self):
-        return "{}-{}".format(self.email, self.id)
+        return "{}----{}".format(self.email, self.id)
 
     def has_perm(self, perm, obj=None):
         return True

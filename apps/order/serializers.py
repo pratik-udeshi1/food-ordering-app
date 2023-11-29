@@ -7,6 +7,7 @@ from ..menu.models import Menu
 
 class OrderSerializer(serializers.ModelSerializer):
     final_total = serializers.DecimalField(max_digits=5, decimal_places=2, read_only=True)
+    menu_items = serializers.ListField(write_only=True)
 
     class Meta:
         model = Order
