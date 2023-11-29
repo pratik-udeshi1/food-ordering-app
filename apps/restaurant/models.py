@@ -9,4 +9,4 @@ class Restaurant(BaseModel):
     active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.name
+        return "{}----{}".format(self.name[:15], self.id)

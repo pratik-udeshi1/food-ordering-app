@@ -31,4 +31,4 @@ class Menu(BaseModel):
         ordering = ['category', 'name']
 
     def __str__(self):
-        return self.name
+        return "{}----{}".format(self.name[:15], self.id)
