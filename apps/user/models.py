@@ -68,6 +68,16 @@ class User(AbstractBaseUser, BaseModel):
         verbose_name_plural = "User"
         ordering = ['-created_at']
 
+    def tokens(self):
+        """
+        For retrieving tokens from simple-jwt
+        """
+        refresh = RefreshToken.for_user(self)
+        return {
+            'refresh': str(refresh),
+            'access': str(refresh.access_token)
+        }
+
 
 class Session(BaseModel):
     device = (
