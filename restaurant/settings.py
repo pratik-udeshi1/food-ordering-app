@@ -33,6 +33,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+
+# DJANGO Settings Module
+DJANGO_SETTINGS_MODULE = env('DJANGO_SETTINGS_MODULE', default='restaurant.settings')
+
 # Application definition
 
 INSTALLED_APPS = [
