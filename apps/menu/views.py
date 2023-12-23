@@ -8,7 +8,6 @@ from common.constants import ApplicationMessages
 from common.model_utils import filter_instance, get_object_or_notfound
 from .models import Menu
 from .serializers import MenuSerializer
-from ..restaurant.models import Restaurant
 
 
 class MenuList(generics.ListCreateAPIView):

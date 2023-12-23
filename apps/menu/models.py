@@ -1,7 +1,13 @@
 from django.db import models
+from storages.backends.s3boto3 import S3Boto3Storage
 
 from apps.restaurant.models import Restaurant
 from common.models import BaseModel
+
+
+class MenuImageStorage(S3Boto3Storage):
+    location = 'local-testing-1'  # S3 bucket sub folder where images will be stored
+    file_overwrite = False  # Prevent overwriting existing files with the same name
 
 
 class Menu(BaseModel):
@@ -17,7 +23,7 @@ class Menu(BaseModel):
     price = models.DecimalField(max_digits=5, decimal_places=2)
     category = models.CharField(max_length=50)
     classification = models.CharField(max_length=10, choices=CLASSIFICATION_CHOICES, default=0)
-    image = models.ImageField(upload_to='menu', null=True, blank=True)
+    image = models.ImageField(upload_to='menu', storage=MenuImageStorage, null=True, blank=True)
 
     spicy = models.BooleanField(default=False)
     contains_peanuts = models.BooleanField(default=True)

@@ -8,6 +8,7 @@ from ..restaurant.models import Restaurant
 
 class MenuSerializer(serializers.ModelSerializer):
     restaurant = serializers.UUIDField(write_only=True)
+    image = serializers.ImageField(write_only=True, required=False)
 
     class Meta:
         model = Menu
@@ -21,9 +22,20 @@ class MenuSerializer(serializers.ModelSerializer):
             if not restaurant_instance:
                 raise serializers.ValidationError(ApplicationMessages.DOES_NOT_EXISTS.format('Restaurant'))
         validated_data['restaurant'] = restaurant_instance
-        menu_instance = super(MenuSerializer, self).create(validated_data)
 
+        # Extract the image from the validated data
+        image_data = validated_data.pop('image', None)
+
+        # Create the Menu instance
+        menu_instance = Menu.objects.create(**validated_data)
+
+        # Save the image if it exists
+        if image_data:
+            menu_instance.image.save("menu_image.jpg", image_data, save=True)
+
+        # Format the response data including the restaurant details
         response_data = self.to_representation(menu_instance)
+
         response_data['restaurant'] = {
             'id': menu_instance.restaurant.id,
             'name': menu_instance.restaurant.name,
