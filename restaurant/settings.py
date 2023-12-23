@@ -16,6 +16,8 @@ from pathlib import Path
 import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from celery.schedules import crontab
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 ROOT_DIR = environ.Path(__file__) - 2
 PROJECT_DIR = ROOT_DIR.path('restaurant')
@@ -39,6 +41,20 @@ DJANGO_SETTINGS_MODULE = env('DJANGO_SETTINGS_MODULE', default='restaurant.setti
 
 # Application definition
 
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_PORT = env('EMAIL_PORT')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+FROM_EMAIL = env('FROM_EMAIL')
+FAIL_SILENTLY = False
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+AWS_REGION = env('AWS_REGION')
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
+
 INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.admin',
@@ -48,8 +64,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'drf_yasg',
     'corsheaders',
+    'django_celery_beat',
     # 'django_celery_results',
-    # 'django_celery_beat',
     # 'django_filters',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
@@ -137,6 +153,25 @@ DATABASES = {
     # }
 }
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'celery_tasks_errors.log',
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+        },
+    },
+}
+
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -176,6 +211,23 @@ AUTH_USER_MODEL = 'user.User'
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # Required for username and password authentication
 ]
+
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+CELERY_ENABLE_UTC = True
+CELERY_ALWAYS_EAGER = False
+
+# # Celery Beat configuration
+# CELERY_BEAT_SCHEDULE = {
+#     'send-order-status-email': {
+#         'task': 'apps.tasks.send_order_status_email',
+#         'schedule': crontab(),  # Set the schedule in seconds (e.g., every hour)
+#     },
+# }
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

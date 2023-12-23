@@ -2,6 +2,7 @@ from django.utils import timezone
 from rest_framework import generics, status, filters
 from rest_framework.response import Response
 
+import apps.tasks
 from common import permissions, pagination
 from common.constants import ApplicationMessages
 from common.model_utils import filter_instance, get_object_or_notfound
@@ -29,6 +30,7 @@ class RestaurantList(generics.ListCreateAPIView):
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        apps.tasks.send_order_status_email.delay()
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
