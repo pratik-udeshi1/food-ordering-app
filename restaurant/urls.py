@@ -1,9 +1,9 @@
 from django.contrib import admin
 from django.urls import path, include
+from django.urls import re_path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
-from django.urls import re_path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -11,6 +11,7 @@ urlpatterns = [
     path('api/v1/restaurant/', include('apps.restaurant.urls')),
     path('api/v1/menu/', include('apps.menu.urls')),
     path('api/v1/order/', include('apps.order.urls'))
+    path('api/v1/payment/', include('apps.payment.urls'))
 ]
 
 schema_view = get_schema_view(
