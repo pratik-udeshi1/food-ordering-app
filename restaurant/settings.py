@@ -14,6 +14,8 @@ from datetime import timedelta
 from pathlib import Path
 
 import environ
+import falcon as falcon
+import sentry_sdk
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,7 +34,6 @@ SECRET_KEY = 'django-insecure-8d91#&kn4%(o3s#r4+8_ptj%gcpx+*mj3g36(r$=agcfgi$kk(
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # DJANGO Settings Module
 DJANGO_SETTINGS_MODULE = env('DJANGO_SETTINGS_MODULE', default='restaurant.settings')
@@ -70,6 +71,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'apps.user.middleware.StripeProfileCheckMiddleware',
 ]
 
 REST_FRAMEWORK = {
@@ -183,3 +185,12 @@ AUTHENTICATION_BACKENDS = [
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+if DEBUG:
+    sentry_sdk.init(
+        dsn="https://488180849edaff394e36af1d10b82742@o4506478773600256.ingest.sentry.io/4506478779564032",
+        traces_sample_rate=1.0,
+        profiles_sample_rate=1.0,
+    )
+
+    api = falcon.API()
