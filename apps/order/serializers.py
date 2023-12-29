@@ -3,13 +3,16 @@ from decimal import Decimal
 from django.db import transaction
 from rest_framework import serializers
 
+from common.constants import ApplicationMessages
 from .models import Order, OrderItem
 from ..menu.models import Menu
+from ..payment.utils import StripeHelper
 
 
 class OrderSerializer(serializers.ModelSerializer):
     total = serializers.DecimalField(max_digits=8, decimal_places=2, read_only=True)
     items = serializers.ListField(write_only=True)
+    user = serializers.CharField(write_only=True, required=False)
 
     class Meta:
         model = Order
@@ -18,6 +21,8 @@ class OrderSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         menu_items = validated_data.pop('items', [])
         validated_data['total'] = Decimal('0')
+        user = self.context['request'].user
+        validated_data['user'] = user
 
         with transaction.atomic():
             order_instance = super(OrderSerializer, self).create(validated_data)
@@ -39,12 +44,21 @@ class OrderSerializer(serializers.ModelSerializer):
 
                 order_instance.total += total_item_price
 
-            OrderItem.objects.bulk_create(order_items)
-
-            order_instance.save()
+            try:
+                cents_amount = int(order_instance.total * 100)
+                payment = StripeHelper.make_payment(user, cents_amount, str(order_instance.id))
+                order_instance.status = 'processing'
+                order_instance.payment_status = 'success'
+                order_instance.payment_intent = payment
+                OrderItem.objects.bulk_create(order_items)
+                order_instance.save()
+            except Exception as e:
+                print(f"Stripe payment error: {str(e)}")
+                raise serializers.ValidationError(ApplicationMessages.STRIPE_PAYMENT_FAIL)
 
         response_data = self.to_representation(order_instance)
         response_data['menu_items'] = self.get_menu_items_data(order_items)
+        response_data['payment_details'] = ApplicationMessages.STRIPE_PAYMENT_SUCCESS
 
         return response_data
 

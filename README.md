@@ -4,13 +4,11 @@ This is the backend of a restaurant management system built using Django. The pr
 
 ## Modules
 
-1. **Payment**: Handle payment processing for customer orders.
-2. **Notification**: Send notifications and updates to customers and staff.
-3. **Inventory**: Manage restaurant inventory, including stock tracking and ordering.
-4. **Review**: Allow customers to leave reviews and ratings for the restaurant.
-5. **Report**: Generate reports and analytics on restaurant performance.
-6. **Order**: Manage customer food orders.
-7. **Waste Management**: Manage Food wastage's at the end of the day.
+1. **Restaurant**: Create and list all restaurants.
+2. **Menu**: Handles menu for the restaurant.
+3  **Order**: Manage customer food orders.
+4  **Payment**: Handle payment processing for customer orders via Stripe API.
+5. **User**: Manages users on the platform.
 
 ## Getting Started
 
@@ -21,6 +19,9 @@ Follow these steps to set up and run the project locally.
 - Python 3.x
 - Django
 - PostgreSQL (or other database of your choice)
+- Stripe (Payment API)
+- Boto AWS (AWS Operations)
+- Swagger (API Documentation)
 
 ### Installation
 
@@ -49,7 +50,7 @@ Follow these steps to set up and run the project locally.
    pip install -r requirements.txt
    ```
 
-5. Configure your database settings in `settings.py`. Make sure to update the database name, username, and password.
+5. Configure your database settings in `settings.py`. Make sure to update the database name, username, and password. (or create .env for env variables)
 
 6. Apply migrations:
 
@@ -76,9 +77,9 @@ Follow these steps to set up and run the project locally.
 
 2. Use the admin interface to manage restaurant data, including reservations, payments, inventory, reviews, and more.
 
-3. To access the API collections, please provide API endpoints for each module, and describe how to use them with examples. Here's an example format:
+3. To access the API collections visit `http://localhost:8000/swagger/`. Here's an example format:
 
-   #### Reservation API
+   #### Order API
 
    - Endpoint: `/api/order/`
    - Methods: GET, POST, PUT, DELETE
@@ -89,9 +90,9 @@ Follow these steps to set up and run the project locally.
      ```
      POST /api/order/
      {
-       "customer_name": "John Doe",
-       "table_id": 1,
-       "reservation_time": "2023-01-15T18:00:00Z"
+       "user": "John Doe",
+       "menu_items": [list of menu items],
+       "special_instructions": "Make all spicy, Indian style!!"
      }
      ```
 
@@ -104,7 +105,7 @@ Follow these steps to set up and run the project locally.
      ```
      PUT /api/order/{order_id}/
      {
-       "item_id": {1,2,3}
+       "status": "processing"
      }
      ```
 
