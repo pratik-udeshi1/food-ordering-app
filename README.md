@@ -116,6 +116,13 @@ Follow these steps to set up and run the project locally.
 
 Repeat the above format for each module's API endpoints.
 
+## Running Test Cases
+#### To run test cases for the project, use the following command:
+```
+python manage.py test
+```
+
+
 ## Contributing
 
 If you'd like to contribute to this project, please follow the [CONTRIBUTING.md](CONTRIBUTING.md) guidelines.
