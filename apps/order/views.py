@@ -38,16 +38,3 @@ class OrderList(generics.ListCreateAPIView):
         serializer.is_valid(raise_exception=True)
         order = serializer.save()
         return Response(order, status=status.HTTP_201_CREATED)
-
-    # def patch(self, request, order_id, *args, **kwargs):
-    #     order = get_object_or_notfound(self.model, id=order_id)
-    #     serializer = self.serializer_class(order, data=request.data, partial=True)
-    #     serializer.is_valid(raise_exception=True)
-    #     serializer.save()
-    #     return Response(serializer.data, status=status.HTTP_200_OK)
-    #
-    # def delete(self, request, order_id, *args, **kwargs):
-    #     order = get_object_or_notfound(self.model, id=order_id)
-    #     order.deleted_at = timezone.now()
-    #     order.save()
-    #     return Response(ApplicationMessages.RECORD_DELETED, status=status.HTTP_200_OK)
