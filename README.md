@@ -1,74 +1,75 @@
-# Restaurant Ecommerce API Documentation
+# Restaurant Backend Project
 
-```markdown
-This documentation outlines the RESTful API endpoints and operations for the restaurant ecommerce project. The project is built using Django and includes modules for restaurant management, menu handling, order processing, and user management.
+This is the backend of a restaurant management system built using Django. The project consists of several modules to manage various aspects of a restaurant's operations.
 
-## Installation
+## Modules
 
-To set up and run the project locally, follow these steps:
+1. **Restaurant**: Create and list all restaurants.
+2. **Menu**: Handles menu for the restaurant.
+3  **Order**: Manage customer food orders.
+4  **Payment**: Handle payment processing for customer orders via Stripe API.
+5. **User**: Manages users on the platform.
+
+## Getting Started
+
+Follow these steps to set up and run the project locally.
 
 ### Prerequisites
 
 - Python 3.x
-- Django/Rest Framework
+- Django
 - PostgreSQL (or other database of your choice)
+- Stripe (Payment API)
+- Boto AWS (AWS Operations)
+- Swagger (API Documentation)
 
-### Clone the Repository
+### Installation
 
-```bash
-git clone https://github.com/pratik-udeshi1/restaurant-backend.git
-```
+1. Clone the repository:
 
-### Change to the Project Directory
+   ```
+   git clone https://github.com/pratik-udeshi1/restaurant-backend.git
+   ```
 
-```bash
-cd restaurant-backend
-```
+2. Change to the project directory:
 
-### Create and Activate a Virtual Environment
+   ```
+   cd restaurant-backend
+   ```
 
-On Unix/Linux/Mac:
+3. Create a virtual environment and activate it:
 
-```bash
-python -m venv venv
-source venv/bin/activate
-```
+   ```
+   python -m venv venv
+   source venv/bin/activate  # On Windows, use: venv\Scripts\activate
+   ```
 
-On Windows:
+4. Install the required packages:
 
-```bash
-python -m venv venv
-venv\Scripts\activate
-```
+   ```
+   pip install -r requirements.txt
+   ```
 
-### Install Required Packages
+5. Configure your database settings in `settings.py`. Make sure to update the database name, username, and password. (or create .env for env variables)
 
-```bash
-pip install -r requirements.txt
-```
+6. Apply migrations:
 
-### Configure Database Settings
+   ```
+   python manage.py makemigrations
+   python manage.py migrate
+   ```
 
-Update the database name, username, and password in `settings.py`.
+7. Create a superuser to access the Django admin interface:
 
-### Apply Migrations
+   ```
+   python manage.py createsuperuser
+   ```
 
-```bash
-python manage.py makemigrations
-python manage.py migrate
-```
+8. Run the development server:
 
-### Create a Superuser
-
-```bash
-python manage.py createsuperuser
-```
-
-### Run the Development Server
-
-```bash
-python manage.py runserver
-```
+   ```
+   python manage.py runserver
+   ```
 
 ### Usage
 
@@ -76,62 +77,44 @@ python manage.py runserver
 
 2. Use the admin interface to manage restaurant data, including reservations, payments, inventory, reviews, and more.
 
-3. To access the API collections, refer to the [API Documentation](#restaurant-ecommerce-api-documentation) for details on each module's API endpoints and usage examples.
+3. To access the API collections visit `http://localhost:8000/swagger/`. Here's an example format:
 
-## API Documentation
+   #### Order API
 
-Access the Swagger documentation by visiting `http://localhost:8000/swagger/`
+   - Endpoint: `/api/order/`
+   - Methods: GET, POST, PUT, DELETE
 
-### API E.g.
+   ##### Basic Usage
 
-### Order API
+   - To create a order:
+     ```
+     POST /api/order/
+     {
+       "user": "John Doe",
+       "menu_items": [list of menu items],
+       "special_instructions": "Make all spicy, Indian style!!"
+     }
+     ```
 
-#### Get Orders for a Restaurant
+   - To list order:
+     ```
+     GET /api/order/
+     ```
 
-- **Endpoint:** `/api/order/restaurant/{restaurant_id}`
-- **Methods:** GET
-- **Parameters:**
-  - `restaurant_id` (path) - ID of the restaurant
-- **Response:**
-  - 200 OK
-  - Example:
-    ```json
-    [
-      {
-        "id": "order_id_1",
-        "total": "50.00",
-        "items": ["item_id_1", "item_id_2"],
-        "user": "user_id_1",
-        "created_at": "2023-01-15T12:00:00Z",
-        "updated_at": "2023-01-15T12:30:00Z",
-        "status": "processed",
-        "special_instructions": "No onions",
-        "payment_intent": "payment_intent_id_1",
-        "payment_status": "completed",
-        "restaurant": "restaurant_id_1",
-        "menu_items": ["menu_item_id_1", "menu_item_id_2"]
-      },
-      {
-        "id": "order_id_2",
-        "total": "25.00",
-        "items": ["item_id_3"],
-        "user": "user_id_2",
-        "created_at": "2023-01-16T14:00:00Z",
-        "updated_at": "2023-01-16T14:15:00Z",
-        "status": "pending",
-        "special_instructions": null,
-        "payment_intent": "payment_intent_id_2",
-        "payment_status": "pending",
-        "restaurant": "restaurant_id_1",
-        "menu_items": ["menu_item_id_3"]
-      }
-    ]
-    ```
-- **Description:** Get a list of orders for a specific restaurant.
+   - To update the order:
+     ```
+     PUT /api/order/{order_id}/
+     {
+       "status": "processing"
+     }
+     ```
 
-## Getting Started
+   - To cancel the order:
+     ```
+     DELETE /api/order/{order_id}/
+     ```
 
-Follow the steps in the [Installation](#installation) section to set up and run the project locally.
+Repeat the above format for each module's API endpoints.
 
 ## Contributing
 
@@ -143,5 +126,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-Feel free to customize the README further based on your project's specific details and requirements.
-```
+Feel free to customize the README to better suit your project and its specific API endpoints. Make sure to provide more detailed information about each API, input validation, and any other specifics your project may have.
