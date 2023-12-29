@@ -1,74 +1,74 @@
-# Restaurant Backend Project
+# Restaurant Ecommerce API Documentation
 
-This is the backend of a restaurant management system built using Django. The project consists of several modules to manage various aspects of a restaurant's operations.
+```markdown
+This documentation outlines the RESTful API endpoints and operations for the restaurant ecommerce project. The project is built using Django and includes modules for restaurant management, menu handling, order processing, and user management.
 
-## Modules
+## Installation
 
-1. **Payment**: Handle payment processing for customer orders.
-2. **Notification**: Send notifications and updates to customers and staff.
-3. **Inventory**: Manage restaurant inventory, including stock tracking and ordering.
-4. **Review**: Allow customers to leave reviews and ratings for the restaurant.
-5. **Report**: Generate reports and analytics on restaurant performance.
-6. **Order**: Manage customer food orders.
-7. **Waste Management**: Manage Food wastage's at the end of the day.
-
-## Getting Started
-
-Follow these steps to set up and run the project locally.
+To set up and run the project locally, follow these steps:
 
 ### Prerequisites
 
 - Python 3.x
-- Django
+- Django/Rest Framework
 - PostgreSQL (or other database of your choice)
 
-### Installation
+### Clone the Repository
 
-1. Clone the repository:
+```bash
+git clone https://github.com/pratik-udeshi1/restaurant-backend.git
+```
 
-   ```
-   git clone https://github.com/pratik-udeshi1/restaurant-backend.git
-   ```
+### Change to the Project Directory
 
-2. Change to the project directory:
+```bash
+cd restaurant-backend
+```
 
-   ```
-   cd restaurant-backend
-   ```
+### Create and Activate a Virtual Environment
 
-3. Create a virtual environment and activate it:
+On Unix/Linux/Mac:
 
-   ```
-   python -m venv venv
-   source venv/bin/activate  # On Windows, use: venv\Scripts\activate
-   ```
+```bash
+python -m venv venv
+source venv/bin/activate
+```
 
-4. Install the required packages:
+On Windows:
 
-   ```
-   pip install -r requirements.txt
-   ```
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
 
-5. Configure your database settings in `settings.py`. Make sure to update the database name, username, and password.
+### Install Required Packages
 
-6. Apply migrations:
+```bash
+pip install -r requirements.txt
+```
 
-   ```
-   python manage.py makemigrations
-   python manage.py migrate
-   ```
+### Configure Database Settings
 
-7. Create a superuser to access the Django admin interface:
+Update the database name, username, and password in `settings.py`.
 
-   ```
-   python manage.py createsuperuser
-   ```
+### Apply Migrations
 
-8. Run the development server:
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
 
-   ```
-   python manage.py runserver
-   ```
+### Create a Superuser
+
+```bash
+python manage.py createsuperuser
+```
+
+### Run the Development Server
+
+```bash
+python manage.py runserver
+```
 
 ### Usage
 
@@ -76,44 +76,62 @@ Follow these steps to set up and run the project locally.
 
 2. Use the admin interface to manage restaurant data, including reservations, payments, inventory, reviews, and more.
 
-3. To access the API collections, please provide API endpoints for each module, and describe how to use them with examples. Here's an example format:
+3. To access the API collections, refer to the [API Documentation](#restaurant-ecommerce-api-documentation) for details on each module's API endpoints and usage examples.
 
-   #### Reservation API
+## API Documentation
 
-   - Endpoint: `/api/order/`
-   - Methods: GET, POST, PUT, DELETE
+Access the Swagger documentation by visiting `http://localhost:8000/swagger/`
 
-   ##### Basic Usage
+### API E.g.
 
-   - To create a order:
-     ```
-     POST /api/order/
-     {
-       "customer_name": "John Doe",
-       "table_id": 1,
-       "reservation_time": "2023-01-15T18:00:00Z"
-     }
-     ```
+### Order API
 
-   - To list order:
-     ```
-     GET /api/order/
-     ```
+#### Get Orders for a Restaurant
 
-   - To update the order:
-     ```
-     PUT /api/order/{order_id}/
-     {
-       "item_id": {1,2,3}
-     }
-     ```
+- **Endpoint:** `/api/order/restaurant/{restaurant_id}`
+- **Methods:** GET
+- **Parameters:**
+  - `restaurant_id` (path) - ID of the restaurant
+- **Response:**
+  - 200 OK
+  - Example:
+    ```json
+    [
+      {
+        "id": "order_id_1",
+        "total": "50.00",
+        "items": ["item_id_1", "item_id_2"],
+        "user": "user_id_1",
+        "created_at": "2023-01-15T12:00:00Z",
+        "updated_at": "2023-01-15T12:30:00Z",
+        "status": "processed",
+        "special_instructions": "No onions",
+        "payment_intent": "payment_intent_id_1",
+        "payment_status": "completed",
+        "restaurant": "restaurant_id_1",
+        "menu_items": ["menu_item_id_1", "menu_item_id_2"]
+      },
+      {
+        "id": "order_id_2",
+        "total": "25.00",
+        "items": ["item_id_3"],
+        "user": "user_id_2",
+        "created_at": "2023-01-16T14:00:00Z",
+        "updated_at": "2023-01-16T14:15:00Z",
+        "status": "pending",
+        "special_instructions": null,
+        "payment_intent": "payment_intent_id_2",
+        "payment_status": "pending",
+        "restaurant": "restaurant_id_1",
+        "menu_items": ["menu_item_id_3"]
+      }
+    ]
+    ```
+- **Description:** Get a list of orders for a specific restaurant.
 
-   - To cancel the order:
-     ```
-     DELETE /api/order/{order_id}/
-     ```
+## Getting Started
 
-Repeat the above format for each module's API endpoints.
+Follow the steps in the [Installation](#installation) section to set up and run the project locally.
 
 ## Contributing
 
@@ -125,4 +143,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-Feel free to customize the README to better suit your project and its specific API endpoints. Make sure to provide more detailed information about each API, input validation, and any other specifics your project may have.
+Feel free to customize the README further based on your project's specific details and requirements.
+```
