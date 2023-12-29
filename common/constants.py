@@ -58,3 +58,5 @@ class ApplicationMessages:
     STRIPE_CUST_PM_SUCCESS = "Customer and payment method created successfully"
     STRIPE_PAYMENT_SUCCESS = "Payment processed successfully on Stripe"
     STRIPE_PAYMENT_FAIL = "Payment Failed on Stripe"
+    STRIPE_PROFILE_NOT_EXIST = "Stripe profile doesn't exist. " \
+                               "Please create signup for stripe profile, to access further"

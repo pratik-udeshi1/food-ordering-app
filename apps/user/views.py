@@ -23,6 +23,13 @@ class UserCreate(generics.CreateAPIView):
 class UserLogin(TokenObtainPairView):
     serializer_class = UserLoginSerializer
 
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            response = super().post(request, *args, **kwargs)
+            return response
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class UserLogout(views.APIView):
     def post(self, request):

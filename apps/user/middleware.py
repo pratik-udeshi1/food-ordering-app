@@ -1,5 +1,10 @@
-from django.http import HttpResponse
+import uuid
+
 from rest_framework import status
+from rest_framework.renderers import JSONRenderer
+from rest_framework.response import Response
+
+from common.constants import ApplicationMessages
 
 
 class StripeProfileCheckMiddleware:
@@ -8,9 +13,25 @@ class StripeProfileCheckMiddleware:
 
     def __call__(self, request):
         if request.user.is_authenticated:
-            if not request.user.payment_method_user:
-                message = "Stripe profile doesn't exist. Please create signup for stripe profile, to access further"
-                return HttpResponse(message, status=status.HTTP_400_BAD_REQUEST)
-
+            has_payment_method = request.user.payment_method_user.exists()
+            if not has_payment_method:
+                response = Response(
+                    data={
+                        "success": False,
+                        "code": 403,
+                        "error": {
+                            "traceId": uuid.uuid4(),
+                            "message": [
+                                ApplicationMessages.STRIPE_PROFILE_NOT_EXIST
+                            ]
+                        }
+                    },
+                    status=status.HTTP_403_FORBIDDEN
+                )
+                response.accepted_renderer = JSONRenderer()
+                response.accepted_media_type = "application/json"
+                response.renderer_context = {}
+                response.render()
+                return response
         response = self.get_response(request)
         return response

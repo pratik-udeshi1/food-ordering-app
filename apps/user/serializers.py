@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate, login
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -33,10 +34,18 @@ class UserLoginSerializer(TokenObtainPairSerializer):
     username_field = 'email'
 
     def validate(self, attrs):
+        user = authenticate(email=attrs['email'], password=attrs['password'])
+        login(self.context['request'], user)
+
         data = super().validate(attrs)
         user = self.user
 
         if user and user.role and user.role.name == 'staff':
-            return data
+            return {
+                'user_id': user.id,
+                'email': user.email,
+                'access_token': data['access'],
+                'refresh_token': data['refresh']
+            }
         else:
             raise serializers.ValidationError("Only users with the 'staff' role can log in.")
