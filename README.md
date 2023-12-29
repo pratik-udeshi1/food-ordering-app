@@ -125,11 +125,11 @@ python manage.py test
 
 ## Contributing
 
-If you'd like to contribute to this project, please follow the [CONTRIBUTING.md](CONTRIBUTING.md) guidelines.
+If you'd like to fork this project, please feel free to.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://opensource.org/licenses/MIT) file for details.
 
 ---
 
