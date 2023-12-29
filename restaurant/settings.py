@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'apps.menu',
     'apps.order',
     'apps.restaurant',
+    'apps.payment',
 ]
 
 MIDDLEWARE = [
@@ -125,6 +126,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'restaurant.wsgi.application'
+STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY', None)
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
