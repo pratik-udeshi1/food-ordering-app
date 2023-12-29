@@ -4,7 +4,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "nhp.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "restaurant.settings")
 
 # apps/user/tests/factories.py
 
