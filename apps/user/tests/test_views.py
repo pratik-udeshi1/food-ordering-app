@@ -4,9 +4,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from apps.user.models import Role
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "nhp.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "restaurant.settings")
 
 # apps/user/tests/factories.py
 
@@ -94,8 +92,6 @@ class UserLoginTest(APITestCase):
         url = reverse("user-login")
 
         response = self.client.post(url, payload, format='json')
-
-        print(response.content)
 
         # Update assertions based on your authentication logic
         self.assertEqual(response.status_code, status.HTTP_200_OK)

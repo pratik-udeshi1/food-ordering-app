@@ -34,7 +34,7 @@ class OrderList(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         request.data['restaurant'] = self.kwargs.get('restaurant_id')
-        serializer = self.serializer_class(data=request.data)
+        serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         order = serializer.save()
         return Response(order, status=status.HTTP_201_CREATED)
