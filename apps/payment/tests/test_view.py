@@ -1,11 +1,11 @@
 import os
 
+from apps.user.tests.test_views import UserFactory
 from django.urls import reverse
+from faker import factory
 from rest_framework import status
-from rest_framework.test import APITestCase
 
-from .factories import UserFactory
-from .models import PaymentMethod
+from apps.payment.models import PaymentMethod
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "restaurant.settings")
 

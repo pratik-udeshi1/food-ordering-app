@@ -12,7 +12,11 @@ class StripeProfileCheckMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        if request.user.is_authenticated:
+
+        api_views = '/api/v1'
+
+        # Check if the request is within the specified 'api/v1' url route..
+        if api_views in request.path_info and request.user.is_authenticated:
             has_payment_method = request.user.payment_method_user.exists()
             if not has_payment_method:
                 response = Response(
